@@ -1,0 +1,24 @@
+img{
+    max-width: 300px;
+    width: 100%;
+    max-height: -webkit-fill-available;
+}
+button{
+    display: block;
+}
+#app_content{
+    display: flex;
+    justify-content: space-evenly;
+}
+.same-height{
+    padding: 2%;
+    border: 1px solid #dfdfdf;
+    display: flex;
+    flex-direction: column;
+    align-items: inherit;
+    justify-content: space-between;
+    height: 350px;
+}
+#catButton{
+    margin-top: 44px;;
+}
