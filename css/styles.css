@@ -22,3 +22,6 @@ button{
 #catButton{
     margin-top: 44px;;
 }
+#error_message{
+    color:red;
+}
