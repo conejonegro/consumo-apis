@@ -25,3 +25,20 @@ button{
 #error_message{
     color:red;
 }
+.favorite-article{
+    width: 100%;
+    max-width: 342px;
+    display: inline-block;
+    margin-right: 32px;
+    margin-bottom: 32px;
+}
+.favorite-article img{
+    width: 100%;
+    max-width: 342px;
+}
+#contenido_de_favoritos{
+    max-width: 1140px !important;
+    margin: 0 auto;
+    text-align: center;
+    width: 100%;
+}

@@ -9,16 +9,16 @@ loadRandomCatsButton.addEventListener( 'click', loadRandomCats);
 
 async function loadRandomCats(){
 
-        const res = await fetch(randomCatsURL);
-        const data = await res.json();
+    const res = await fetch(randomCatsURL);
+    const data = await res.json();
 
-        const imgElem1 = document.getElementById('img1');
-        const imgElem2 = document.getElementById('img2');
-        const imgElem3 = document.getElementById('img3');
+    const imgElem1 = document.getElementById('img1');
+    const imgElem2 = document.getElementById('img2');
+    const imgElem3 = document.getElementById('img3');
 
-        console.log("Random Cats");
-        console.log(data);
-        // console.log(res);
+    console.log("Random Cats");
+     console.log(data);
+    // console.log(res);
 
         if(res.status !== 200){
                 console.log(`Hay un error: ${res.status}, Message: ${data.message}`);
@@ -29,6 +29,16 @@ async function loadRandomCats(){
                 imgElem1.src = data[0].url;
                 imgElem2.src = data[1].url;
                 imgElem3.src = data[2].url;
+
+
+				const btn1Elem = document.getElementById('save_in_favorites_btn1');
+				const btn2Elem = document.getElementById('save_in_favorites_btn2');
+				const btn3Elem = document.getElementById('save_in_favorites_btn3');
+
+				btn1Elem.onclick = () => saveCatInFavorites(data[0].id);
+				btn2Elem.onclick = () => saveCatInFavorites(data[1].id);
+				btn3Elem.onclick = () => saveCatInFavorites(data[2].id);
+
         }
  
 }
@@ -44,20 +54,37 @@ async function showFavoriteCats(){
         console.log("Show Favorite Cats");
         console.log(data);
 
-        const favoriteCatElem = document.getElementById('favoriteCats');
+		const favoritosElem = document.getElementById('contenido_de_favoritos');
+		favoritosElem.innerHTML = " ";
+		
+        data.forEach(element => {
 
-        console.log(data[0].image.url); 
+            // console.log(element.image.url);
+			const articleElem = document.createElement('article');
+			const imgElem =	document.createElement('img');
+			const buttonElem = document.createElement('button');
+			buttonElem.innerText = 'Quitar de favoritos';
+			
 
-        favoriteCatElem.src=data[0].image.url;
+			articleElem.classList='favorite-article';
+			imgElem.src = element.image.url;
+
+			favoritosElem.appendChild(articleElem);
+			articleElem.appendChild(imgElem);
+			articleElem.appendChild(buttonElem);
+
+			buttonElem.onclick = () => quitarDeFavoritos(element.id)
+
+        });
+
+        // favoriteCatElem.src = data[0].image.url;
 
 }
 
-showFavoriteCats();
+ showFavoriteCats();
 
-const btn1Elem = document.getElementById('save_in_fav_btn1');
-btn1Elem.addEventListener('click', saveFavoriteCats);
 
-async function saveFavoriteCats(){
+async function saveCatInFavorites(imageId){
 
         const res = await fetch(FAVORITE_CATS_URL, {
                 // Adding method type
@@ -69,7 +96,7 @@ async function saveFavoriteCats(){
                 
                 // Adding body or contents to send
                 body: JSON.stringify({
-                        image_id: "9ccXTANkb"
+                        image_id: imageId
                 }),
                   
         });
@@ -82,13 +109,33 @@ async function saveFavoriteCats(){
                 errorElem.innerHTML = `Hay un error: ${res.status}, Message: ${data.message}`;
         }
         else{
-                
+                console.log("SAVED IN FAVORITES");
+				showFavoriteCats();
+                // console.log(data);
+                // console.log(res);
+
+                // showFavoriteCats();
         }
         
-        console.log("SAVE FAVORITES");
-        console.log(data);
-        console.log(res);
-
 }
 
 
+async function quitarDeFavoritos(elementID){
+
+	const FAVORITE_CATS_URL_DELETE = `${REAL_URL}favourites/${elementID}?${API_KEY}`;
+	const res = await fetch(FAVORITE_CATS_URL_DELETE, { method: 'DELETE' });
+	const data = await res.json();
+
+	if(res.status !== 200){
+		console.log(`Hay un error: ${res.status}, Message: ${data.message}`);
+		const errorElem = document.getElementById('error_message');
+		errorElem.innerHTML = `Hay un error: ${res.status}, Message: ${data.message}`;
+}
+	else{
+			console.log("SAVED IN FAVORITES");
+			console.log(res);
+			console.log(data);
+			showFavoriteCats();
+	}
+
+}
