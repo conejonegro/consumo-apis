@@ -3,11 +3,14 @@ const API_KEY_NUMBERS = '617c85df-e898-4837-b119-16ac6cebe0f8';
 const REAL_URL = "https://api.thecatapi.com/v1/";
 const randomCatsURL = `${REAL_URL}images/search?&limit=3`;
 const FAVORITE_CATS_URL = `${REAL_URL}favourites`;
+const UPLOAD_IMAGES_URL = `${REAL_URL}images/upload`;
 
 
 const loadRandomCatsButton = document.getElementById('catButton');
 loadRandomCatsButton.addEventListener( 'click', loadRandomCats);
 
+const subirImagenBtn = document.getElementById('subirImagenBtn');
+subirImagenBtn.addEventListener( 'click', uploadImage);
 
 async function loadRandomCats(){
 
@@ -48,7 +51,6 @@ async function loadRandomCats(){
         }
  
 }
-
 loadRandomCats();
 
 
@@ -91,8 +93,7 @@ async function showFavoriteCats(){
         // favoriteCatElem.src = data[0].image.url;
 
 }
-
- showFavoriteCats();
+showFavoriteCats();
 
 
 async function saveCatInFavorites(imageId){
@@ -153,4 +154,38 @@ async function quitarDeFavoritos(elementID){
 			showFavoriteCats();
 	}
 
+}
+
+async function uploadImage(e){
+
+	e.preventDefault();
+
+	const form = document.getElementById('form');
+	const formData = new FormData(form);
+
+	console.log(formData.get('file'));
+
+ 	const res = await fetch(UPLOAD_IMAGES_URL, {
+		method: 'POST',
+		headers: {
+			// 'Content-type': 'multipart/form-data',
+			'X-API-KEY': API_KEY_NUMBERS,
+		},
+		body: formData,
+	})
+	const data = await res.json();
+
+	if (res.status !== 201) {
+        console.log(`Hay un error: ${res.status}, Message: ${data.message}`);
+        const errorElem = document.getElementById('error_message');
+        errorElem.innerHTML = `Hay un error: ${res.status}, Message: ${data.message}`;
+    }
+    else {
+        console.log("Foto de michi cargada :)");
+		console.log({ data });
+		console.log(data.url);
+        saveCatInFavorites(data.id) 
+    }
+	
+	
 }
