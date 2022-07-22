@@ -1,7 +1,9 @@
 const API_KEY = "api_key=617c85df-e898-4837-b119-16ac6cebe0f8";
+const API_KEY_NUMBERS = '617c85df-e898-4837-b119-16ac6cebe0f8';
 const REAL_URL = "https://api.thecatapi.com/v1/";
-const randomCatsURL = `${REAL_URL}images/search?${API_KEY}&limit=3`;
-const FAVORITE_CATS_URL = `${REAL_URL}favourites?${API_KEY}`;
+const randomCatsURL = `${REAL_URL}images/search?&limit=3`;
+const FAVORITE_CATS_URL = `${REAL_URL}favourites`;
+
 
 const loadRandomCatsButton = document.getElementById('catButton');
 loadRandomCatsButton.addEventListener( 'click', loadRandomCats);
@@ -9,7 +11,12 @@ loadRandomCatsButton.addEventListener( 'click', loadRandomCats);
 
 async function loadRandomCats(){
 
-    const res = await fetch(randomCatsURL);
+    const res = await fetch(randomCatsURL, {
+		method : 'GET',
+		headers: { 
+			'x-api-key': API_KEY_NUMBERS
+		}
+	} );
     const data = await res.json();
 
     const imgElem1 = document.getElementById('img1');
@@ -30,7 +37,6 @@ async function loadRandomCats(){
                 imgElem2.src = data[1].url;
                 imgElem3.src = data[2].url;
 
-
 				const btn1Elem = document.getElementById('save_in_favorites_btn1');
 				const btn2Elem = document.getElementById('save_in_favorites_btn2');
 				const btn3Elem = document.getElementById('save_in_favorites_btn3');
@@ -48,7 +54,12 @@ loadRandomCats();
 
 async function showFavoriteCats(){
 
-        const res = await fetch(FAVORITE_CATS_URL);
+        const res = await fetch(FAVORITE_CATS_URL, {
+			method: 'GET',
+			headers: {
+				'x-api-key': API_KEY_NUMBERS
+			}
+		});
         const data = await res.json();
 
         console.log("Show Favorite Cats");
@@ -92,6 +103,7 @@ async function saveCatInFavorites(imageId){
                 // Adding headers to the request
                 headers: {
                         "Content-type": "application/json",
+						'x-api-key': API_KEY_NUMBERS
                 },
                 
                 // Adding body or contents to send
@@ -113,8 +125,6 @@ async function saveCatInFavorites(imageId){
 				showFavoriteCats();
                 // console.log(data);
                 // console.log(res);
-
-                // showFavoriteCats();
         }
         
 }
@@ -122,8 +132,13 @@ async function saveCatInFavorites(imageId){
 
 async function quitarDeFavoritos(elementID){
 
-	const FAVORITE_CATS_URL_DELETE = `${REAL_URL}favourites/${elementID}?${API_KEY}`;
-	const res = await fetch(FAVORITE_CATS_URL_DELETE, { method: 'DELETE' });
+	const FAVORITE_CATS_URL_DELETE = `${REAL_URL}favourites/${elementID}`;
+	const res = await fetch(FAVORITE_CATS_URL_DELETE, { 
+		method: 'DELETE',
+		headers: {
+			'x-api-key': API_KEY_NUMBERS
+		}
+	});
 	const data = await res.json();
 
 	if(res.status !== 200){
