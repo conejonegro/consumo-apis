@@ -156,9 +156,7 @@ async function quitarDeFavoritos(elementID){
 
 }
 
-async function uploadImage(e){
-
-	e.preventDefault();
+async function uploadImage(){
 
 	const form = document.getElementById('form');
 	const formData = new FormData(form);
